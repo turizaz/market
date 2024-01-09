@@ -2,11 +2,11 @@
 import * as s3 from "@/libs/s3";
 import {redirect} from "next/navigation";
 import prisma from "@/db";
-import { Prisma } from ".prisma/client";
+import {Asset, Prisma} from ".prisma/client";
 import assetModel from '@/db/model/asset';
 import { z } from 'zod'
 import { zfd } from "zod-form-data";
-import { Asset } from ".prisma/client";
+
 
 export async function uploadAsset(
 	formState: ErrorSignature,

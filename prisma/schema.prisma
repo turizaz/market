@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("account")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  Assets        Asset[]
+  orders        Order[]
+  isSeller      Boolean   @default(false)
+  bankAccount   String?
+
+  @@map("user")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Asset {
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  title       String
+  description String
+  pictures    String[]
+  file        String?
+  published   Boolean    @default(false)
+  verified    Boolean    @default(false)
+  authorId    Int
+  categories  Category[]
+  User        User?      @relation(fields: [userId], references: [id])
+  userId      String?
+  price       Float      @default(1)
+  Orders      Order?     @relation(fields: [orderId], references: [id])
+  orderId     Int?
+
+  @@map("asset")
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sessionId String
+  assets    Asset[]
+  amount    Float
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@map("order")
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String
+  assets Asset[]
+
+  @@map("category")
+}
+
+enum Role {
+  CUSTOMER
+  SELLER
+}
