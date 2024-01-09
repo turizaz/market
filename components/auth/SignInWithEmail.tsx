@@ -11,6 +11,7 @@ export default function SignInWithEmail() {
 				callbackUrl: `${window.location.origin}`,
 				redirect: false
 			})
+		console.log(signinResult);
 	}
 	return (
 			<div className={'w-full'}>
