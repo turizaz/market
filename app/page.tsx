@@ -2,8 +2,9 @@
 import Image from 'next/image'
 import car1 from '@/public/car1.jpg';
 import Asset from "@/components/asset";
+import prisma from "@/db";
 export default async function Home() {
-    const assets = await prisma?.asset.findMany({
+    const assets = await prisma.asset.findMany({
        where: {
            verified: true
        }
