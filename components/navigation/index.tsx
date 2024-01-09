@@ -9,8 +9,12 @@ import {getSession} from "@/actions/session";
 export default async function Navigation() {
 
 	const session = await getSession();
-
-	const { assets, order } : { assets: Asset[] | null , order: Order | null } = await getOrders(session);
+	let fullOrder:  { assets: Asset[] | null , order: Order | null } | null = null;
+	try {
+		fullOrder = await getOrders(session);
+	} catch (e) {
+		fullOrder = null
+	}
 
 	return (
 		<div className="flex text-lg font-bold text-lime-900 bold bg-white/40 justify-between pl-10 pt-5 pb-5">
@@ -24,8 +28,8 @@ export default async function Navigation() {
 					{ session && <Link className={' hover:text-black'} href="/account">Account</Link> }
 				</li>
 				{ session ? logoutButton : loginButton }
-				{ order && <div>
-						{ <Link  className={'flex'} href={'/account/cart'} > {assets?.length}  <Cart/> </Link> }
+				{ fullOrder?.order && <div>
+						{ <Link  className={'flex'} href={'/account/cart'} > {fullOrder.assets?.length}  <Cart/> </Link> }
 					</div>
 				}
 			</ul>

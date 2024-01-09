@@ -1,8 +1,7 @@
 import prisma from "@/db";
 import {Session} from "next-auth";
 export async function getUserByEmail(session: Session | null) {
-	if(!session) return null;
-	return prisma.user.findUnique({
+	return prisma.user.findUniqueOrThrow({
 		where: {
 			email: session?.user?.email as string
 		}
