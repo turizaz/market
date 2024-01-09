@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { PutObjectCommand } from '@aws-sdk/client-s3'
 import AWS from 'aws-sdk'
 const s3 = new AWS.S3({
 	region: process.env.AWS_REGION,

@@ -24,9 +24,10 @@ const s3 = new S3({
 const upload2Bucket = (file: File, Body: Buffer) => {
 	return s3Client.send(new PutObjectCommand({ Bucket, Key: file.name, Body }));
 }
-
+const s3Url = 'https://3d-market.s3.eu-west-3.amazonaws.com/';
 export {
 	upload2Bucket,
 	s3Client,
-	s3
+	s3,
+	s3Url
 }
